@@ -1,0 +1,66 @@
+# Workflow to validate a change raised via pull request, merge or release.
+# For more information on syntax, refer https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+on:
+  # Trigger the workflow on pull request raised event.
+  pull_request:
+    branches:
+      - main
+      - develop
+  # Trigger the workflow on push event.
+  push:
+    branches:
+      - main
+      - develop
+  # Trigger the workflow on release created event.
+  release:
+    types:
+      - created
+
+# name of the CI pipeline.
+name: Validate Pipeline
+
+env:
+  HUSKY_SKIP_INSTALL: 1
+
+jobs:
+  validate:
+    # Validate the application for install, build and test.
+    name: Validate Application(s)
+
+    # Image to use for the CI actions in the pipline.
+    runs-on: ubuntu-latest
+
+    # A strategy creates a build matrix for the jobs. Different variations can be defined to run each job in.
+    strategy:
+      # A matrix allows to create multiple jobs by performing variable substitution in a single job definition.
+      # For example, use a matrix to create jobs for more than one supported version of a programming language, operating system, or tool.
+      # A matrix reuses the job's configuration and creates a job for each matrix configured.
+      matrix:
+        node-version: [ 14 ]
+
+    # The steps of execution within the pipeline.
+    steps:
+      # Step to checkout the latest code.
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Setup the NodeJS environment as per matrix definition.
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Install the node dependencies.
+      - name: Install Application
+        # n.b. unsafe-perm is added to allow root execution on ubuntu container for lerna.
+        run: npm ci --unsafe-perm
+
+      # Build the Infrastructure components.
+      - name: Build Infrastructure
+        working-directory: ./packages/infra-aws
+        run: npm run build
+
+      # Run Jest Unit tests.
+      - name: Run Unit tests
+        run: npm run validate

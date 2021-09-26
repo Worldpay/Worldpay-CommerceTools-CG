@@ -1,0 +1,19 @@
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/packages/connector'
+    schedule:
+      interval: 'monthly'
+    versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/packages/infra-aws'
+    schedule:
+      interval: 'monthly'
+    versioning-strategy: increase
