@@ -1,0 +1,58 @@
+{
+  "name": "infra-lambda",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - Infra Module",
+  "keywords": [
+    "worldpay",
+    "commercetools",
+    "payment"
+  ],
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/Worldpay/Worldpay-CommerceTools-CG#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Worldpay/Worldpay-CommerceTools-CG.git",
+    "directory": "packages/infra-lambda"
+  },
+  "scripts": {
+    "build": "npm i && npx tsc",
+    "deploy": "npm run build && npx cdk deploy",
+    "destroy": "npm run build && npx cdk destroy",
+    "synth": "npm run build && npx cdk synth",
+    "clean": "rm lib/*.d.ts; rm lib/*.js; rm ./*.js; rm ./*.d.ts",
+    "update-deps": "npx ncu -u"
+  },
+  "bugs": {
+    "url": "https://github.com/Worldpay/Worldpay-CommerceTools-CG/issues"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.124",
+    "@aws-cdk/aws-certificatemanager": "^1.124",
+    "@aws-cdk/aws-ecs": "^1.124.0",
+    "@aws-cdk/aws-iam": "^1.124",
+    "@aws-cdk/aws-lambda": "^1.124",
+    "@aws-cdk/aws-logs": "^1.124",
+    "@aws-cdk/aws-route53": "^1.124",
+    "@aws-cdk/aws-route53-targets": "^1.124",
+    "@aws-cdk/aws-s3-deployment": "^1.124.0",
+    "@aws-cdk/core": "^1.124",
+    "@types/lodash": "^4.14.174",
+    "@types/node": "^16.10.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "aws-cdk": "^1.124.0",
+    "npm-check-updates": "^11.8.5",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}

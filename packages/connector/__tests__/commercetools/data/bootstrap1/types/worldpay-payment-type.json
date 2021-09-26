@@ -1,0 +1,53 @@
+{
+  "key": "worldpay-payment",
+  "name": {
+    "en": "Worldpay payment type"
+  },
+  "resourceTypeIds": ["payment"],
+  "fieldDefinitions": [
+    {
+      "name": "installationId",
+      "label": {
+        "en": "Installation ID"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "SingleLine"
+    },
+    {
+      "name": "merchantCode",
+      "label": {
+        "en": "Merchant Code"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "SingleLine"
+    },
+    {
+      "name": "orderCode",
+      "label": {
+        "en": "Order Code"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "SingleLine"
+    },
+    {
+      "name": "referenceId",
+      "label": {
+        "en": "Reference ID"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "SingleLine"
+    }
+  ]
+}

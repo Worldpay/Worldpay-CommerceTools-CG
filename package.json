@@ -1,0 +1,29 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "update-deps": "npx ncu -u; lerna run update-deps --parallel",
+    "lint": "eslint \"./**/*.js\" --max-warnings=0",
+    "prettier": "prettier --check \"**/*.{js,json,md}\"",
+    "prettify": "prettier --write \"**/*.{js,json,md}\"",
+    "validate": "npm run prettier && npm run lint && npm test",
+    "test": "lerna run test",
+    "connector": "cd packages/connector && npm run start",
+    "deploy:infra:aws": "cd packages/infra-aws && npm run deploy --",
+    "destroy:infra:aws": "cd packages/infra-aws && npm run destroy --",
+    "docx": "pandoc -s -o WP_CT_Connector.docx README.md docs/*.md packages/connector/*.md packages/connector/lib/commercetools/*.md packages/connector/lib/httpserver/*.md packages/connector/lib/processor/notification/*.md packages/connector/lib/processor/payment/*.md"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate"
+    }
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.2",
+    "lerna": "^4.0.0",
+    "prettier": "^2.4.1"
+  }
+}

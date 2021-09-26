@@ -1,0 +1,53 @@
+{
+  "key": "worldpay-payment-interface-interaction",
+  "name": {
+    "en": "Worldpay Payment Interaction"
+  },
+  "resourceTypeIds": ["payment-interface-interaction"],
+  "fieldDefinitions": [
+    {
+      "name": "createdAt",
+      "label": {
+        "en": "Date Created"
+      },
+      "required": false,
+      "type": {
+        "name": "DateTime"
+      },
+      "inputHint": "SingleLine"
+    },
+    {
+      "name": "transactionId",
+      "label": {
+        "en": "Transaction ID"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "SingleLine"
+    },
+    {
+      "name": "request",
+      "label": {
+        "en": "Worldpay XML Request"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "MultiLine"
+    },
+    {
+      "name": "response",
+      "label": {
+        "en": "Worldpay XML Response"
+      },
+      "required": false,
+      "type": {
+        "name": "String"
+      },
+      "inputHint": "MultiLine"
+    }
+  ]
+}
