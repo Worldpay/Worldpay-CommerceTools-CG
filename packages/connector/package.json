@@ -55,7 +55,7 @@
     "xmlbuilder2": "^3.0.2"
   },
   "devDependencies": {
-    "aws-sdk": "^2.995.0",
+    "aws-sdk": "^2.1018.0",
     "jest": "^27.2.2",
     "jest-junit": "^12.3.0",
     "jest-xml-matcher": "^1.2.0",
