@@ -1,0 +1,27 @@
+title Worldpay-commercetools Connector - Payment Sequence Diagram (Apple Pay)
+
+note right of Customer: Payment UI Component
+Customer -> +Storefront\n(Sunrise SPA): Select payment method "Apple Pay"
+Storefront\n(Sunrise SPA)->+commercetools: Create payment request \n POST /{projectKey}/me/payments (PaymentDraft)
+Worldpay Connector\n(Extension endpoint)->Apple: Create session (TLS v1.2)
+Apple->Worldpay Connector\n(Extension endpoint): Session details
+Worldpay Connector\n(Extension endpoint)->commercetools: Save session in payment
+commercetools->-Storefront\n(Sunrise SPA): Create Payment Request Response \n (Payment representation: redirectURL)
+Storefront\n(Sunrise SPA)->Storefront\n(Sunrise SPA): Check Fingerprint
+Storefront\n(Sunrise SPA)->Apple: Authorise payment
+Apple->Storefront\n(Sunrise SPA): Authorised payment (signature)
+Storefront\n(Sunrise SPA)->commercetools: Update payment (signature)
+commercetools->+Worldpay Connector\n(Extension endpoint): Update Payment event
+Worldpay Connector\n(Extension endpoint)->Worldpay Connector\n(Extension endpoint): Validate payload\n(ignore if not Worldpay payment)
+Worldpay Connector\n(Extension endpoint)->commercetools: Get Customer and Order/Cart data
+Worldpay Connector\n(Extension endpoint)->Worldpay Connector\n(Extension endpoint): Build PaymentRequest XML Message
+Worldpay Connector\n(Extension endpoint)->+Worldpay WPG: Submit PaymentRequest XML to Worldpay \n (signature, orderCode, merchantCode, addresses, amount...)
+Worldpay WPG->Worldpay WPG: Store order and payment details
+Worldpay WPG->-Worldpay Connector\n(Extension endpoint): PaymentRequest XML Response \n (status, referenceID, orderCode)
+Worldpay Connector\n(Extension endpoint)->Worldpay Connector\n(Extension endpoint): Validate payload\n(merchantCode/orderCode)
+Worldpay Connector\n(Extension endpoint)->Worldpay Connector\n(Extension endpoint): Process Worldpay response XML\nBuild commercetools actions
+Worldpay Connector\n(Extension endpoint)->-commercetools: Payment Create API Extension Response \n (payment update action: redirectURL)
+commercetools->commercetools: Store Payment resource, InterfaceInteraction, Transaction
+Storefront\n(Sunrise SPA)->+commercetools: Create order from cart \n POST /{projectKey}/me/orders (MyOrderFromCartDraft)
+Storefront\n(Sunrise SPA)->Storefront\n(Sunrise SPA): Display order confirmation
+Storefront\n(Sunrise SPA)->Customer: Continue Shopping

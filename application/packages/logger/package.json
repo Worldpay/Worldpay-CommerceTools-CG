@@ -1,0 +1,27 @@
+{
+  "name": "@gradientedge/wcc-logger",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - Connector Module",
+  "keywords": [
+    "worldpay",
+    "commercetools",
+    "payment"
+  ],
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/worldpay-commercetools-connector#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientedge/worldpay-commercetools-connector.git",
+    "directory": "packages/connector"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/worldpay-commercetools-connector/issues"
+  },
+  "dependencies": {
+    "@gradientedge/wcc-context": "workspace:^0.0.0",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.21"
+  }
+}

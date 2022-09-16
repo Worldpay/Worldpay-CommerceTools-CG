@@ -1,0 +1,69 @@
+{
+  "name": "@gradientedge/wcc-connector",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - Connector Module",
+  "keywords": [
+    "worldpay",
+    "commercetools",
+    "payment"
+  ],
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/worldpay-commercetools-connector#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientedge/worldpay-commercetools-connector.git",
+    "directory": "packages/connector"
+  },
+  "scripts": {
+    "e2etest:all": "cypress run --headless --browser chrome",
+    "e2etest:all:headed": "cypress run --headed --browser chrome",
+    "e2etest:hosted": "cypress run --headless --browser chrome --spec '__tests__/e2e/specs/klarna.spec.js'",
+    "e2etest:interact": "cypress open --browser chrome"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/worldpay-commercetools-connector/issues"
+  },
+  "jest-junit": {
+    "outputDirectory": "../../.reports/junit",
+    "outputName": "js-test-results.xml"
+  },
+  "dependencies": {
+    "@commercetools/api-request-builder": "^5.6.3",
+    "@commercetools/sdk-client": "^2.1.2",
+    "@commercetools/sdk-middleware-auth": "^6.2.1",
+    "@commercetools/sdk-middleware-http": "^6.2.0",
+    "@gradientedge/wcc-context": "workspace:^0.0.0",
+    "@gradientedge/wcc-logger": "workspace:^0.0.0",
+    "axios": "^0.26.1",
+    "currency-codes": "^2.1.0",
+    "fast-xml-parser": "^4.0.7",
+    "http-headers-js": "^1.0.10",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.7",
+    "validate.js": "^0.13.1",
+    "winston": "^3.7.2",
+    "xmlbuilder2": "^3.0.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@commercetools/sdk-auth": "^3.0.13",
+    "apollo-boost": "^0.4.9",
+    "apollo-env": "^0.10.1",
+    "apollo-cache-inmemory": "^1.6.6",
+    "serverless-http": "^3.0.1",
+    "cypress": "^9.5.4",
+    "graphql": "^16.3.0",
+    "graphql-tag": "^2.12.6",
+    "aws-sdk": "^2.1059.0"
+  }
+}

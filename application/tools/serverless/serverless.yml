@@ -1,0 +1,33 @@
+service: server-aws-lambda
+frameworkVersion: '2 || 3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: '20201221'
+
+functions:
+  payment:
+    handler: ../../apps/aws/payment-lambda/src/local.handler
+    events:
+      - http:
+          path: /payment
+          method: any
+  notification:
+    handler: ../../apps/aws/notification-lambda/src/index.handler
+    events:
+      - http:
+          path: /notification
+          method: any
+custom:
+  dotenv:
+    basePath: ../../
+  serverless-offline:
+    noPrependStageInUrl: true
+    allowCache: false
+    httpPort: 5000
+    printOutput: true
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline

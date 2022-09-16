@@ -1,0 +1,5 @@
+# Avoid making hackers happy with secrets commited into a public repository
+*.pem
+*.cer
+*.p12
+*.decrypted

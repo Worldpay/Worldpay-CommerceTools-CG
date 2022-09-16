@@ -1,0 +1,22 @@
+name: Build Application(s)
+description: Build Application(s)
+
+inputs:
+  use-cache:
+    description: 'Determine if to use build cache'
+    required: true
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build Application
+      id: build-application
+      working-directory: ./application
+      shell: bash
+      run: pnpm package:aws
+    - name: Build Infrastructure
+      id: build-infrastructure
+      working-directory: ./infrastructure/aws
+      shell: bash
+      run: yarn build

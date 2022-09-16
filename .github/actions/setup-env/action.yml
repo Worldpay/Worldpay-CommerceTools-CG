@@ -1,0 +1,24 @@
+name: Setup environment
+description: Setup environment
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Yarn
+      shell: bash
+      run: npm install -g yarn@1
+    - uses: pnpm/action-setup@v2.0.1
+      with:
+        version: 6.25.1
+    - name: Install Application
+      id: install-application
+      if: inputs.use-cache != 'true'
+      working-directory: ./application
+      shell: bash
+      run: pnpm install --frozen-lockfile
+    - name: Install API Infrastructure
+      id: install-infrastructure
+      if: inputs.use-cache != 'true'
+      working-directory: ./infrastructure/aws
+      shell: bash
+      run: yarn install --frozen-lockfile

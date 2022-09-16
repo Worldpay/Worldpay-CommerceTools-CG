@@ -1,0 +1,16 @@
+name: Test Applications
+description: Test Applications
+
+runs:
+  using: "composite"
+  steps:
+    - name: Test Application
+      id: test-application
+      working-directory: ./application
+      shell: bash
+      run: pnpm validate
+    - name: Test UI Infrastructure
+      id: test-ui-infrastructure
+      working-directory: ./infrastructure/aws
+      shell: bash
+      run: yarn validate

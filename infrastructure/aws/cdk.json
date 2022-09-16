@@ -1,0 +1,27 @@
+{
+  "app": "node index",
+  "context": {
+    "stackName": "worldpay-connector",
+    "connectorCertificateStackName": "certificate",
+    "connectorSecretsStackName": "secrets",
+    "connectorLambdaExtensionStackName": "lambda-extension",
+    "connectorLambdaNotificationStackName": "lambda-notification",
+    "subDomain": "worldpay",
+    "domainName": "gradientedge.io",
+    "region": "eu-west-1",
+    "stage": "dev",
+    "worldpaySecretName": "worldpay-secrets",
+    "commercetoolsSecretName": "commercetools-secrets",
+    "logRetentionDays": 7,
+    "memorySizeinMb": 1024,
+    "reservedConcurrentExecutions": 100,
+    "timeoutInSecs": 60,
+    "commercetools": {
+      "region": "europe_gcp",
+      "timeout": 25000,
+      "authUrl": "https://auth.europe-west1.gcp.commercetools.com",
+      "apiUrl": "https://api.europe-west1.gcp.commercetools.com"
+    },
+    "paymentCodePath": "../../.artifacts/aws-lambda-payment"
+  }
+}

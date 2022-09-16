@@ -1,0 +1,425 @@
+{
+	"info": {
+		"_postman_id": "7e52fce8-80b0-4485-94b6-bc86f7d6f187",
+		"name": "Worldpay",
+		"description": "This collection is aimed to ease the development of the World Pay connector.\n\nThere are two different lambdas:\n\n*   Payment\n    \n\nPayment lambda represent the flow started from CommerceTools and directed to WorldPay. It also handled the responses for those requests\n\n*   Notification\n    \n\nNotification lambda is in charge of acting on the asynchronous communications from WorldPay",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Payment Hosted Payment Page",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"Create\",\n    \"resource\": {\n        \"id\": \"{{payment-id}}\",\n        \"typeId\": \"payment\",\n        \"obj\": {\n            \"paymentMethodInfo\": {\n                \"paymentInterface\": \"worldpay\",\n                \"method\": \"card\"\n            },\n            \"anonymousId\": \"{{customer-id}}\",\n            \"custom\": {\n                \"type\": {\n                    \"typeId\": \"type\",\n                    \"id\": \"{{custom-field-id}}\"\n                },\n                \"fields\": {\n                    \"languageCode\": \"de\",\n                    \"cartId\": \"{{cart-id}}\"\n                }\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment GooglePay",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"Create\",\n  \"resource\": {\n    \"typeId\": \"payment\",\n    \"id\": \"{{payment-id}}\",\n    \"obj\": {\n      \"id\": \"{{payment-id}}\",\n      \"version\": 1,\n      \"lastMessageSequenceNumber\": 1,\n      \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n      \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n      \"lastModifiedBy\": {\n        \"clientId\": \"{{client-id}}\",\n        \"isPlatformClient\": false,\n        \"customer\": {\n          \"typeId\": \"customer\",\n          \"id\": {{customer-id}}\n        }\n      },\n      \"createdBy\": {\n        \"clientId\": \"{{client-id}}\",\n        \"isPlatformClient\": false,\n        \"customer\": {\n          \"typeId\": \"customer\",\n          \"id\": {{customer-id}}\n        }\n      },\n      \"customer\": {\n        \"typeId\": \"customer\",\n        \"id\": {{customer-id}}\n      },\n      \"amountPlanned\": {\n        \"type\": \"centPrecision\",\n        \"currencyCode\": \"EUR\",\n        \"centAmount\": 55400,\n        \"fractionDigits\": 2\n      },\n      \"paymentMethodInfo\": {\n        \"paymentInterface\": \"worldpay\",\n        \"method\": \"googlePay\"\n      },\n      \"custom\": {\n        \"type\": {\n          \"typeId\": \"type\",\n          \"id\": {{custom-field-id}}\n        },\n        \"fields\": {\n          \"languageCode\": \"en\",\n          \"cartId\": {{cart-id}},\n          \"paymentData\": \"{\\\"apiVersionMinor\\\":0,\\\"apiVersion\\\":2,\\\"paymentMethodData\\\":{\\\"description\\\":\\\"Visa •••• 1111\\\",\\\"tokenizationData\\\":{\\\"type\\\":\\\"PAYMENT_GATEWAY\\\",\\\"token\\\":\\\"{\\\\\\\"signature\\\\\\\":\\\\\\\"MEUCIQDSSxa4BBJuTpzus0GIXzB9l2PAUXcks3f8+tsLdgfjOwIgaTmFEOYPWGpOo/gCkk7hVXRYEXAxhAlEpVlVmF7/e20\\\\\\\\u003d\\\\\\\",\\\\\\\"protocolVersion\\\\\\\":\\\\\\\"ECv1\\\\\\\",\\\\\\\"signedMessage\\\\\\\":\\\\\\\"{\\\\\\\\\\\\\\\"encryptedMessage\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"QSDJopW8M1DOpnC+x2jgA4KRZSxSnJccSAHuOPddzD7UCxUDJ96YP7L4YawdW8ZSsTQKD3MxHzHON5wFox+0XCMSm2v5rP+cKddcS2adAXY/xGyFkXO1p/FmyNbM3zag214TLisccN4AUfOQkwID/zmNRLEAuk1lUk4j4LLHF5Nj9C7W5tXXxy23pYqzEByloa0SyURANWFZUYJM69ANb9/4k0A1tnV6aqAzd8gbFipUvg3FbP8ahf1zci1EWSBLYxYrXjGwJl/yX+Zp9Xp7/JawWDc8/WdbsmeMvzlk6q94rY3DDyACmvfKykIGeUIOhGEUbJQKHG6jsJu0nEAqf8iiqRjBaC3lK0UJ4d5VihPW85o0jhoMDAhryealIcit5gWdJz8wASm45JgrF1RNovip+psm0ZxLY72yd1dcPYZBwIdHCqsem0tgpm3OP0ivGlDWctv43HZBhA\\\\\\\\\\\\\\\\u003d\\\\\\\\\\\\\\\\u003d\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"ephemeralPublicKey\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"BEAafLoV+beJ5g2613beXeA3kyyRrgcCQ6EJb0avbYkR+dNDvF0xh082Uh+TMnBc905LeZ2ZETp+HXCp/h2UHs0\\\\\\\\\\\\\\\\u003d\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"tag\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"yRDM9S6WF+0skMD9omE5CceiQYJg7CH4UCNOwhNhesc\\\\\\\\\\\\\\\\u003d\\\\\\\\\\\\\\\"}\\\\\\\"}\\\"},\\\"type\\\":\\\"CARD\\\",\\\"info\\\":{\\\"cardNetwork\\\":\\\"VISA\\\",\\\"cardDetails\\\":\\\"1111\\\"}},\\\"method\\\":\\\"googlePay\\\",\\\"ip\\\":\\\"0.0.0.0\\\"}\"\n        }\n      },\n      \"paymentStatus\": {},\n      \"transactions\": [],\n      \"interfaceInteractions\": []\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment PayPal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "order-id",
+								"value": "456",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"action\": \"Create\",\n  \"resource\": {\n    \"typeId\": \"payment\",\n    \"id\": \"{{payment-id}}\",\n    \"obj\": {\n      \"id\": \"{{payment-id}}\",\n      \"version\": 1,\n      \"lastMessageSequenceNumber\": 1,\n      \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n      \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n      \"lastModifiedBy\": {\n        \"clientId\": \"{{client-id}}\",\n        \"isPlatformClient\": false,\n        \"customer\": {\n          \"typeId\": \"customer\",\n          \"id\": \"{{customer-id}}\"\n        }\n      },\n      \"createdBy\": {\n        \"clientId\": \"{{client-id}}\",\n        \"isPlatformClient\": false,\n        \"customer\": {\n          \"typeId\": \"customer\",\n          \"id\": \"{{customer-id}}\"\n        }\n      },\n      \"customer\": {\n        \"typeId\": \"customer\",\n        \"id\": \"{{customer-id}}\"\n      },\n      \"amountPlanned\": {\n        \"type\": \"centPrecision\",\n        \"currencyCode\": \"EUR\",\n        \"centAmount\": 55400,\n        \"fractionDigits\": 2\n      },\n      \"paymentMethodInfo\": {\n        \"paymentInterface\": \"worldpay\",\n        \"method\": \"payPal\"\n      },\n      \"custom\": {\n        \"type\": {\n          \"typeId\": \"type\",\n          \"id\": \"{{custom-field-id}}\"\n        },\n        \"fields\": {\n          \"languageCode\": \"en\",\n          \"cartId\": \"{{cart-id}}\"\n        }\n      },\n      \"paymentStatus\": {},\n      \"transactions\": [],\n      \"interfaceInteractions\": []\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment Klarna Pay Now",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"action\": \"Create\",\n        \"resource\": {\n            \"typeId\": \"payment\",\n            \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n            \"obj\": {\n                \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n                \"version\": 1,\n                \"lastMessageSequenceNumber\": 1,\n                \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"createdBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                },\n                \"amountPlanned\": {\n                    \"type\": \"centPrecision\",\n                    \"currencyCode\": \"EUR\",\n                    \"centAmount\": 15200,\n                    \"fractionDigits\": 2\n                },\n                \"paymentMethodInfo\": {\n                    \"paymentInterface\": \"worldpay\",\n                    \"method\": \"tokenisedCard\"\n                },\n                \"custom\": {\n                    \"type\": {\n                        \"typeId\": \"type\",\n                        \"id\": \"{{custom-field-id}}\"\n                    },\n                    \"fields\": {\n                        \"languageCode\": \"en\",\n                        \"cartId\": \"{{cart-id}}\",\n                        \"paymentData\": \"{\\\"tokenEventReference\\\":\\\"TOK7854312\\\",\\\"tokenReason\\\":\\\"Wanted another one\\\",\\\"paymentTokenID\\\":9902019934757792000,\\\"cardBrand\\\":\\\"Mastercard\\\",\\\"cardSubBrand\\\":\\\"MASTERCARD\\\",\\\"issuerCountryCode\\\":\\\"N/A\\\",\\\"obfuscatedPAN\\\":\\\"1234********9876\\\",\\\"bin\\\":\\\"444433\\\",\\\"method\\\":\\\"tokenisedCard\\\",\\\"cvc\\\":\\\"123\\\"}\"\n                    }\n                },\n                \"paymentStatus\": {},\n                \"transactions\": [],\n                \"interfaceInteractions\": []\n            }\n        }\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment iDEAL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"action\": \"Create\",\n        \"resource\": {\n            \"typeId\": \"payment\",\n            \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n            \"obj\": {\n                \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n                \"version\": 1,\n                \"lastMessageSequenceNumber\": 1,\n                \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"createdBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                },\n                \"amountPlanned\": {\n                    \"type\": \"centPrecision\",\n                    \"currencyCode\": \"EUR\",\n                    \"centAmount\": 15200,\n                    \"fractionDigits\": 2\n                },\n                \"paymentMethodInfo\": {\n                    \"paymentInterface\": \"worldpay\",\n                    \"method\": \"iDEAL\"\n                },\n                \"custom\": {\n                    \"type\": {\n                        \"typeId\": \"type\",\n                        \"id\": \"{{custom-field-id}}\"\n                    },\n                    \"fields\": {\n                        \"languageCode\": \"en\",\n                        \"cartId\": \"{{cart-id}}\",\n                        \"paymentData\": \"{\\\"method\\\":\\\"iDEAL\\\",\\\"shopperBankCode\\\":\\\"RABOBANK\\\",\\\"ip\\\":\\\"0.0.0.0\\\"}\"\n                    }\n                },\n                \"paymentStatus\": {},\n                \"transactions\": [],\n                \"interfaceInteractions\": []\n            }\n        }\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apple Pay session",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"Create\",\n    \"resource\": {\n        \"typeId\": \"payment\",\n        \"id\": \"1e0e44bc-1e3e-43eb-ba2c-523403ee0bdd\",\n        \"obj\": {\n            \"id\": \"1e0e44bc-1e3e-43eb-ba2c-523403ee0bdd\",\n            \"version\": 1,\n            \"lastMessageSequenceNumber\": 1,\n            \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n            \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n            \"lastModifiedBy\": {\n                \"clientId\": \"{{client-id}}\",\n                \"isPlatformClient\": false,\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                }\n            },\n            \"createdBy\": {\n                \"clientId\": \"{{client-id}}\",\n                \"isPlatformClient\": false,\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                }\n            },\n            \"customer\": {\n                \"typeId\": \"customer\",\n                \"id\": \"{{customer-id}}\"\n            },\n            \"amountPlanned\": {\n                \"type\": \"centPrecision\",\n                \"currencyCode\": \"EUR\",\n                \"centAmount\": 12300,\n                \"fractionDigits\": 2\n            },\n            \"paymentMethodInfo\": {\n                \"paymentInterface\": \"worldpay\",\n                \"method\": \"applePay\"\n            },\n            \"custom\": {\n                \"type\": {\n                    \"typeId\": \"type\",\n                    \"id\": \"{{custom-field-id}}\"\n                },\n                \"fields\": {\n                    \"languageCode\": \"en\",\n                    \"cartId\": \"{{cart-id}}\",\n                    \"paymentData\": \"{\\\"method\\\":\\\"applePay\\\",\\\"isTrusted\\\":true,\\\"validationURL\\\":\\\"https://apple-pay-gateway.apple.com/paymentservices/startSession\\\",\\\"ip\\\":\\\"0.0.0.0\\\"}\"\n                }\n            },\n            \"paymentStatus\": {},\n            \"transactions\": [],\n            \"interfaceInteractions\": []\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apple Pay session Completion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"Create\",\n    \"resource\": {\n        \"typeId\": \"payment\",\n        \"id\": \"1e0e44bc-1e3e-43eb-ba2c-523403ee0bdd\",\n        \"obj\": {\n            \"id\": \"1e0e44bc-1e3e-43eb-ba2c-523403ee0bdd\",\n            \"version\": 1,\n            \"lastMessageSequenceNumber\": 1,\n            \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n            \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n            \"lastModifiedBy\": {\n                \"clientId\": \"{{client-id}}\",\n                \"isPlatformClient\": false,\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                }\n            },\n            \"createdBy\": {\n                \"clientId\": \"{{client-id}}\",\n                \"isPlatformClient\": false,\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                }\n            },\n            \"customer\": {\n                \"typeId\": \"customer\",\n                \"id\": \"{{customer-id}}\"\n            },\n            \"amountPlanned\": {\n                \"type\": \"centPrecision\",\n                \"currencyCode\": \"EUR\",\n                \"centAmount\": 12300,\n                \"fractionDigits\": 2\n            },\n            \"paymentMethodInfo\": {\n                \"paymentInterface\": \"worldpay\",\n                \"method\": \"applePay\"\n            },\n            \"custom\": {\n                \"type\": {\n                    \"typeId\": \"type\",\n                    \"id\": \"{{custom-field-id}}\"\n                },\n                \"fields\": {\n                    \"languageCode\": \"en\",\n                    \"cartId\": \"{{card-id}}\",\n                    \"paymentData\": \"{\\\"method\\\":\\\"applePay\\\",\\\"isTrusted\\\":true,\\\"validationURL\\\":\\\"https://apple-pay-gateway.apple.com/paymentservices/startSession\\\",\\\"ip\\\":\\\"0.0.0.0\\\"}\"\n                }\n            },\n            \"paymentStatus\": {},\n            \"transactions\": [],\n            \"interfaceInteractions\": []\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment Failure (anonymous)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"action\": \"Create\",\n        \"resource\": {\n            \"typeId\": \"payment\",\n            \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n            \"obj\": {\n                \"id\": \"a5f8a1dc-8aa4-406d-99c1-b03f3c06db50\",\n                \"version\": 1,\n                \"lastMessageSequenceNumber\": 1,\n                \"createdAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedAt\": \"1970-01-01T00:00:00.000Z\",\n                \"lastModifiedBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"createdBy\": {\n                    \"clientId\": \"{{client-id}}\",\n                    \"isPlatformClient\": false,\n                    \"customer\": {\n                        \"typeId\": \"customer\",\n                        \"id\": \"{{customer-id}}\"\n                    }\n                },\n                \"customer\": {\n                    \"typeId\": \"customer\",\n                    \"id\": \"{{customer-id}}\"\n                },\n                \"amountPlanned\": {\n                    \"type\": \"centPrecision\",\n                    \"currencyCode\": \"EUR\",\n                    \"centAmount\": 15200,\n                    \"fractionDigits\": 2\n                },\n                \"paymentMethodInfo\": {\n                    \"paymentInterface\": \"worldpay\",\n                    \"method\": \"tokenisedCard\"\n                },\n                \"custom\": {\n                    \"type\": {\n                        \"typeId\": \"type\",\n                        \"id\": \"{{custom-field-id}}\"\n                    },\n                    \"fields\": {\n                        \"languageCode\": \"en\",\n                        \"cartId\": \"{{cart-id}}\",\n                        \"paymentData\": \"{\\\"tokenEventReference\\\":\\\"TOK7854312\\\",\\\"tokenReason\\\":\\\"Wanted another one\\\",\\\"paymentTokenID\\\":9902019934757792000,\\\"cardBrand\\\":\\\"Mastercard\\\",\\\"cardSubBrand\\\":\\\"MASTERCARD\\\",\\\"issuerCountryCode\\\":\\\"N/A\\\",\\\"obfuscatedPAN\\\":\\\"1234********9876\\\",\\\"bin\\\":\\\"444433\\\",\\\"method\\\":\\\"tokenisedCard\\\",\\\"cvc\\\":\\\"123\\\"}\"\n                    }\n                },\n                \"paymentStatus\": {},\n                \"transactions\": [],\n                \"interfaceInteractions\": []\n            }\n        }\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{paymentEndpoint}}",
+							"host": [
+								"{{paymentEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Notification Visa Authorised",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE paymentService PUBLIC \"-//WorldPay//DTD WorldPay PaymentService v1//EN\" \"http://dtd.worldpay.com/paymentService_v1.dtd\">\n<paymentService version=\"1.4\" merchantCode=\"{{merchant-code}}\">\n    <notify>\n        <orderStatusEvent orderCode=\"{{cart-id}}\">\n            <payment>\n                <paymentMethod>VISA_CREDIT-SSL</paymentMethod>\n                <paymentMethodDetail>\n                    <card number=\"444433******1111\" type=\"creditcard\">\n                        <expiryDate>\n                            <date month=\"12\" year=\"2023\"/>\n                        </expiryDate>\n                    </card>\n                </paymentMethodDetail>\n                <amount value=\"26500\" currencyCode=\"EUR\" exponent=\"2\" debitCreditIndicator=\"credit\"/>\n                <lastEvent>AUTHORISED</lastEvent>\n                <AuthorisationId id=\"401309\"/>\n                <CVCResultCode description=\"NOT CHECKED BY ACQUIRER\"/>\n                <AVSResultCode description=\"NOT CHECKED BY ACQUIRER\"/>\n                <cardHolderName><![CDATA[AUTHORISED]]></cardHolderName>\n                <issuerCountryCode>N/A</issuerCountryCode>\n                <issuerName>UNKNOWN</issuerName>\n            </payment>\n            <token>\n                <authenticatedShopperID>{{customer-id}}</authenticatedShopperID>\n                <tokenEventReference>Order_{{cart-id}}</tokenEventReference>\n                <tokenDetails tokenEvent=\"CONFLICT\">\n                    <paymentTokenID>{{token-id}}</paymentTokenID>\n                    <paymentTokenExpiry>\n                        <date dayOfMonth=\"22\" month=\"03\" year=\"2022\" hour=\"17\" minute=\"48\" second=\"12\"/>\n                    </paymentTokenExpiry>\n                    <tokenEventReference>Order_{{cart-id}}</tokenEventReference>\n                    <tokenReason>Created during order: {{cart-id}}</tokenReason>\n                </tokenDetails>\n                <paymentInstrument>\n                    <cardDetails>\n                        <expiryDate>\n                            <date month=\"12\" year=\"2026\"/>\n                        </expiryDate>\n                        <cardHolderName><![CDATA[AUTHORISED]]></cardHolderName>\n                        <cardAddress>\n                            <address>\n                                <address1>street1</address1>\n                                <postalCode>E1 NW1</postalCode>\n                                <city>London</city>\n                                <countryCode>DE</countryCode>\n                            </address>\n                        </cardAddress>\n                        <derived>\n                            <cardBrand>VISA</cardBrand>\n                            <cardSubBrand>VISA_CREDIT</cardSubBrand>\n                            <issuerCountryCode>N/A</issuerCountryCode>\n                            <obfuscatedPAN>4444********1111</obfuscatedPAN>\n                            <bin>444433</bin>\n                        </derived>\n                    </cardDetails>\n                </paymentInstrument>\n            </token>\n            <journal journalType=\"AUTHORISED\">\n                <bookingDate>\n                    <date dayOfMonth=\"16\" month=\"03\" year=\"2022\"/>\n                </bookingDate>\n                <accountTx accountType=\"IN_PROCESS_AUTHORISED\" batchId=\"14\">\n                    <amount value=\"26500\" currencyCode=\"EUR\" exponent=\"2\" debitCreditIndicator=\"credit\"/>\n                </accountTx>\n            </journal>\n        </orderStatusEvent>\n    </notify>\n</paymentService>",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{notificationEndpoint}}",
+							"host": [
+								"{{notificationEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notification Paypal redirectURL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE paymentService PUBLIC \"-//WorldPay//DTD WorldPay PaymentService v1//EN\"\n        \"http://dtd.worldpay.com/paymentService_v1.dtd\">\n<paymentService version=\"1.4\" merchantCode=\"{{merchant-code}}\">\n    <reply>\n        <orderStatus orderCode=\"{{cart-id}}\">\n            <reference id=\"3333504219\">\n                https://payments-test.worldpay.com/app/hpp/integration/wpg/corporate?OrderKey={{merchant-code}}%{{cart-id}}&amp;Ticket=00164788125018102NhRjnG8JPKbnxu7SKrKzTg&amp;source=https%3A%2F%2Fsecure-test.worldpay.com\n            </reference>\n        </orderStatus>\n    </reply>\n</paymentService>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{notificationEndpoint}}",
+							"host": [
+								"{{notificationEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notification Shopper Redirected",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ABC123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE paymentService PUBLIC \"-//WorldPay//DTD WorldPay PaymentService v1//EN\" \"http://dtd.worldpay.com/paymentService_v1.dtd\">\n<paymentService version=\"1.4\" merchantCode=\"{{merchant-code}}\">\n    <notify>\n        <orderStatusEvent orderCode=\"{{cart-id}}\">\n            <payment>\n                <paymentMethod>VISA_CREDIT-SSL</paymentMethod>\n                <paymentMethodDetail>\n                    <card type=\"creditcard\"/>\n                </paymentMethodDetail>\n                <amount value=\"4100\" currencyCode=\"GBP\" exponent=\"2\" debitCreditIndicator=\"credit\"/>\n                <lastEvent>AUTHORISED</lastEvent>\n                <AuthorisationId id=\"116438\"/>\n                <CVCResultCode description=\"NOT SENT TO ACQUIRER\"/>\n                <AVSResultCode description=\"NOT SENT TO ACQUIRER\"/>\n                <cardHolderName>\n                    <![CDATA[Test]]>\n                </cardHolderName>\n                <issuerCountryCode>N/A</issuerCountryCode>\n                <issuerName>UNKNOWN</issuerName>\n            </payment>\n            <token>\n                <authenticatedShopperID>{{customer-id}}</authenticatedShopperID>\n                <tokenEventReference>TOK7854321</tokenEventReference>\n                <!--The event reference from your current submission-->\n                <tokenReason>ClothesDepartment</tokenReason>\n                <tokenDetails tokenEvent=\"NEW\">\n                    <paymentTokenID>9902019934757792074</paymentTokenID>\n                    <paymentTokenExpiry>\n                        <date dayOfMonth=\"3\" month=\"03\" year=\"2019\"/>\n                    </paymentTokenExpiry>\n                    <tokenEventReference>TOK7854321</tokenEventReference>\n                    <!--The event reference from the initial token creation-->\n                    <tokenReason>ClothesDepartment</tokenReason>\n                </tokenDetails>\n                <paymentInstrument>\n                    <cardDetails>\n                        <expiryDate>\n                            <date month=\"03\" year=\"2019\"/>\n                        </expiryDate>\n                        <cardHolderName>J.Shopper</cardHolderName>\n                        <cardAddress>\n                            <address>\n                                <lastName>Shopper</lastName>\n                                <address1>47A</address1>\n                                <address2>Queensbridge Road</address2>\n                                <address3>Suburbia</address3>\n                                <state>Cambridge</state>\n                                <countryCode>GB</countryCode>\n                                <telephoneNumber>0122312345</telephoneNumber>\n                            </address>\n                        </cardAddress>\n                        <derived>\n                            <cardBrand>VISA</cardBrand>\n                            <cardSubBrand>VISA_CREDIT</cardSubBrand>\n                            <issuerCountryCode>N/A</issuerCountryCode>\n                            <obfuscatedPAN>4444********1111</obfuscatedPAN>\n                            <bin>444433</bin>\n                        </derived>\n                    </cardDetails>\n                </paymentInstrument>\n            </token>\n            <journal journalType=\"SENT_FOR_AUTHORISATION\">\n                <bookingDate>\n                    <date dayOfMonth=\"10\" month=\"01\" year=\"2022\"/>\n                </bookingDate>\n            </journal>\n        </orderStatusEvent>\n    </notify>\n</paymentService>",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{notificationEndpoint}}",
+							"host": [
+								"{{notificationEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notification with Card Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE paymentService PUBLIC \"-//WorldPay//DTD WorldPay PaymentService v1//EN\" \"http://dtd.worldpay.com/paymentService_v1.dtd\">\n<paymentService version=\"1.4\" merchantCode=\"{{merchant-code}}\">\n    <notify>\n        <orderStatusEvent orderCode=\"{{cart-id}}\">\n            <payment>\n                <paymentMethod>VISA_CREDIT-SSL</paymentMethod>\n                <paymentMethodDetail>\n                    <card type=\"creditcard\"/>\n                </paymentMethodDetail>\n                <amount value=\"4100\" currencyCode=\"GBP\" exponent=\"2\" debitCreditIndicator=\"credit\"/>\n                <lastEvent>AUTHORISED</lastEvent>\n                <AuthorisationId id=\"116438\"/>\n                <CVCResultCode description=\"NOT SENT TO ACQUIRER\"/>\n                <AVSResultCode description=\"NOT SENT TO ACQUIRER\"/>\n                <cardHolderName>\n                    <![CDATA[Test]]>\n                </cardHolderName>\n                <issuerCountryCode>N/A</issuerCountryCode>\n                <issuerName>UNKNOWN</issuerName>\n            </payment>\n            <token>\n                <authenticatedShopperID>{{customer0-id}}</authenticatedShopperID>\n                <tokenEventReference>TOK7854321</tokenEventReference>\n                <!--The event reference from your current submission-->\n                <tokenReason>ClothesDepartment</tokenReason>\n                <tokenDetails tokenEvent=\"NEW\">\n                    <paymentTokenID>9902019934757792074</paymentTokenID>\n                    <paymentTokenExpiry>\n                        <date dayOfMonth=\"3\" month=\"03\" year=\"2019\"/>\n                    </paymentTokenExpiry>\n                    <tokenEventReference>TOK7854321</tokenEventReference>\n                    <!--The event reference from the initial token creation-->\n                    <tokenReason>ClothesDepartment</tokenReason>\n                </tokenDetails>\n                <paymentInstrument>\n                    <cardDetails>\n                        <expiryDate>\n                            <date month=\"03\" year=\"2019\"/>\n                        </expiryDate>\n                        <cardHolderName>J.Shopper</cardHolderName>\n                        <cardAddress>\n                            <address>\n                                <lastName>Shopper</lastName>\n                                <address1>47A</address1>\n                                <address2>Queensbridge Road</address2>\n                                <address3>Suburbia</address3>\n                                <state>Cambridge</state>\n                                <countryCode>GB</countryCode>\n                                <telephoneNumber>0122312345</telephoneNumber>\n                            </address>\n                        </cardAddress>\n                        <derived>\n                            <cardBrand>VISA</cardBrand>\n                            <cardSubBrand>VISA_CREDIT</cardSubBrand>\n                            <issuerCountryCode>N/A</issuerCountryCode>\n                            <obfuscatedPAN>4444********1111</obfuscatedPAN>\n                            <bin>444433</bin>\n                        </derived>\n                    </cardDetails>\n                </paymentInstrument>\n            </token>\n            <journal journalType=\"SENT_FOR_AUTHORISATION\">\n                <bookingDate>\n                    <date dayOfMonth=\"10\" month=\"01\" year=\"2022\"/>\n                </bookingDate>\n            </journal>\n        </orderStatusEvent>\n    </notify>\n</paymentService>"
+						},
+						"url": {
+							"raw": "{{notificationEndpoint}}",
+							"host": [
+								"{{notificationEndpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

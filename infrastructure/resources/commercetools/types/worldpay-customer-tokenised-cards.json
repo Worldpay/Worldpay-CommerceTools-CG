@@ -1,0 +1,27 @@
+{
+  "key": "customer-tokenised-cards",
+  "name": {
+    "en": "Tokenised WorldPay payment methods"
+  },
+  "description": {
+    "en": "Tokenised payment methods for WorldPay direct payments"
+  },
+  "resourceTypeIds": [
+    "customer"
+  ],
+  "fieldDefinitions": [
+    {
+      "name": "tokenisedCards",
+      "label": {
+        "en": "The customer's tokenised payment cards"
+      },
+      "required": false,
+      "type": {
+        "name": "Set",
+        "elementType": {
+          "name": "String"
+        }
+      }
+    }
+  ]
+}

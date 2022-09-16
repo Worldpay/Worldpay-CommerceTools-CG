@@ -4,41 +4,68 @@ This guide details how to deploy the connector within a production environment.
 
 ## Bootstrapping commercetools entities
 
-To configure commercetools to invoke the connector extension endpoint, the API extensions need to be configured within your commercetools sandbox. Additionally, there are a number of resource type extensionsspecific to the Worldpay payment types.
+To configure commercetools to invoke the connector extension endpoint, the API extensions need to be configured within your commercetools sandbox. Additionally, there are a number of resource type extensions specific to the Worldpay payment types.
 
 | Name                               | commercetools extension type | Description                                                                                         |
-| ---------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------- |
+|------------------------------------|------------------------------|-----------------------------------------------------------------------------------------------------|
 | Payment Extension                  | API Extension                | API extension for the create/update payment actions                                                 |
 | Worldpay Payment Type              | Custom Type                  | Payment resource custom fields for Worldpay specific data                                           |
 | Payment Interface Interaction      | Custom Type                  | Worldpay payment interface interaction data (create payment request from commercetools to Worldpay) |
+| Customer's tokenised cards         | Custom Type                  | Worldpay tokenised credit card, stored in a custom type in the commercetools customer profile       |
 | Notification Interface Interaction | Custom Type                  | Worldpay notification interface interaction data (callback from Worldpay)                           |
 
-These types are defined in the `packages/connector/resources/commercetools` folder. The relevant commercetools APIs need to be invoked to deploy these custom extensions into your commercetools workspace. To facilitate this, the connector provides bootstrapping logic that should be invoked once on any new commercetools sandbox utilising this connector.
+Types are defined in the `infrastructure/resources/commercetools/types` folder. These custom types can be defined in commercetools, either by integrating them into your Infrastructure As Code (IAC) solution, or by manually uploading them using the [Commercetools Postman collection](https://docs.commercetools.com/sdk/postman). In postman, navigate to `Commercetools > Project > Types > Create Type` and paste each of the type files from the resource folder.
 
-To invoke the bootstrapping logic, ensure you have the required environment variables configured (see [user guide](USER_GUIDE.md) for details) and invoke the command `npm run bootstrap` - this will create each of the required entities within commercetools. _NB: This operation is idempotent and if the entities already exist, they will be ignored._
+In `infrastructure/resources/commercetools/api-extension/worldpay-payment-api-extension.json` the API extension can be found, to use as template for defining the end-point for payment object Create/Update events. Before using this file, edit the `url` property. Assign it the end-point of your payment module. After this, upload it to commercetools using the postman project `Commercetools > Project > Extensions > Create Extension`.
+
+The notification endpoint does not need configuration in commercetools. The payment and notification endpoints need deployment with sufficient settings to allow access to commercetools (environment variables `WORLDPAY_CONNECTOR_*`) and correct scopes for the access token.
+
+## Client scopes
+
+### Deployment 
+
+To deploy the extensions and types into commercetools, the following client scopes are required:
+
+* `manage_types`: for adding the custom types
+* `manage_extensions`: to define the payment endpoint that commercetools invokes
+
+### Runtime
+
+While the connector is active, the following scopes are required. For security, we recommend the minimal scope which is independent of other tools/applications that access commercetools:
+
+* `manage_orders`: updates order status upon authorisation of a payment
+* `manage_customers`: updates the customer's tokenised cards in combination with hosted payment where customer request their card to be stored
+* `manage_payments`: updates commercetools payments based on Worldpay notifications
+
+Note that these scopes are never to be shared with end customers, as they are too powerful.
 
 ## Extension & Notification Endpoints
 
-The Worldpay-Comercetools connector provides 2 x endpoints that need to be integrated within a commercetools environment.
+The Worldpay-Commercetools connector provides 2 x endpoints that need to be integrated within a commercetools environment.
 
 - An API extension HTTP endpoint that is invoked by the commercetools platform whenever a create/update API call is made for a Payment resource. This is secured via HTTPS and HTTP authentication with a shared token configured within the connector and the bootstrapped API extension configuration.
-- An API Notification endpoint that is invoked by the Worldpay Payment Gateway to send asynchronous updated regarding payment status changes. The connector processes these notification messages, and updates the relevant entities within commercetools. This endpoint is secured via HTTPS with Mutual TLS Certificate Authentication (mTLS)
+- An API Notification endpoint that is invoked by the Worldpay Payment Gateway to send asynchronous updated regarding payment status changes. The connector processes these notification messages and updates the relevant entities within commercetools. This endpoint is secured via HTTPS with Mutual TLS Certificate Authentication (mTLS)
 
 ## Deployment options
 
-The module consists of a single stateless node.js application that supports both of these endpoints. It can be configured to respond to one or both of these endpoint calls.
+The module consists of a single stateless node.js application that supports both of these endpoints. It can be configured to respond to one or both of these endpoint calls. See [docker container README.md](../application/apps/container/docker/README.md) for more details on how to build the docker image.
 
 Within a production environment, the connector can be deployed as a serverless function (AWS Lambda / Azure Function / GCP Cloud Function), with an API Gateway to invoke the function. Alternatively, it can be deployed as a docker container and run within your container management tooling of choice.
 
-Reference infrastucture-as-code is provided for an AWS deployment using the [AWS Cloud Development Kit (CDK)](https://docs.aws.amazon.com/cdk/latest/guide/home.html) framework. This contains sample stacks for both a serverless (AWS Lambda) deployment or a containerised Docker deployment, using Fargate/ECS container management. _NB: You only need to choose and deploy one of these options - both are provided as reference_
+Reference infrastructure-as-code is provided for an AWS deployment using the [AWS Cloud Development Kit (CDK)](https://docs.aws.amazon.com/cdk/latest/guide/home.html) framework. This contains sample stacks for both a serverless (AWS Lambda) deployment or a containerised Docker deployment, using Fargate/ECS container management.
+
+_NB: You only need to choose and deploy one of these options - both are provided as reference_
 
 The following diagrams shows the reference infrastructure for an AWS serverless deployment of the Worldpay-Commercetools connector module.
 
-![AWS Serverless Infrastrcture](images/aws_serverless_infrastucture.png)
+![AWS Serverless Infrastructure](images/aws_serverless_infrastucture.png)
+
+Certain payment methods require a redirect to a 3rd party site (i.e PayPal, iDEAL bank, Klarna). The customer's browser will leave the Storefront Sunrise SPA, and interact with the 3rd party. Upon success, failure or cancellation of the interaction with the 3rd party, the browser returns to Storefront Sunrise SPA with the payload to complete the transaction.
+Adding that payload to the payment object in Commercetools finalised the transaction.
 
 ### AWS Serverless Infrastructure CDK Constructs
 
-All of the AWS infrastucture components are available in the `packages/infra-aws` folder.
+All of the AWS infrastructure components are available in the `infrastructure/aws` folder.
 
 The following 2 steps enable you to deploy the Worldpay Commercetools Connector
 
@@ -56,22 +83,33 @@ The key properties that need to be configured are as follows:
 
 #### 2. Synthesize and deploy the stack
 
-The `packages/infra-aws/lib` folder contains a number of TypeScript CDK constructs and stacks for all of the required infrastructure components, including Lambda function, IAM roles, API Gateway REST API and custom domain, Route53 DNS hosted zones, CloudWatch logs, S3 bucket for Worldpay mTLS certificate.
+The `infrastructure/aws/lib` folder contains a number of TypeScript CDK constructs and stacks for all of the required infrastructure components, including Lambda function, IAM roles, API Gateway REST API and custom domain, Route53 DNS hosted zones, CloudWatch logs, S3 bucket for Worldpay mTLS certificate.
 
 3 x stacks are available:
 
-- `worldpay-certificate` - contains an S3 bucket with a deployment of the [Worldpay mTLS root certificate](https://developer.worldpay.com/docs/wpg/manage#authenticating-the-sender)
-- `worldpay-connector-lambda` - stack containing all AWS infrastructure required for a serverless scalable Lambda deployment of the connector. This stack has a dependency on the `worldpay-certificate` stack.
-- `worldpay-connector-docker` - stack containing all AWS infrastructure required for an ECS/Fargate deployment of the connector. This stack has a dependency on the `worldpay-certificate` stack.
+- `worldpay-connector-certificate` - contains an S3 bucket with a deployment of the [Worldpay mTLS root certificate](https://developer.worldpay.com/docs/wpg/manage#authenticating-the-sender)
+- `worldpay-connector-lambda-extension` - stack containing all AWS infrastructure required for a serverless scalable Lambda deployment of the connector extension. This stack has a dependency on the `worldpay-connector-certificate` stack.
+- `worldpay-connector-lambda-notification` - stack containing all AWS infrastructure required for a serverless scalable Lambda deployment of the connector notification. This stack has a dependency on the `worldpay-connector-certificate` stack.
 
-The stack names will have the `stage` appended i.e. `worldpay-connector-lambda-dev`
+The stack names will have the `stage` appended i.e. `worldpay-connector-certificate-dev`
 
-You can choose whichever of the lambda or docker stacks suits your infrastruture guidelines.
+You can choose whichever of the lambda or docker stacks suits your infrastructure guidelines.
 
 To deploy the AWS CloudFormation stack for the `dev` stage;
 
-- `npm run deploy -- worldpay-connector-lambda-dev --context stage=dev --context account=1234567890`
+All Stacks
+- `npm run deploy -- --all --context stage=dev --context account=1234567890` 
 
-  or
+Individual Stacks
+- `npm run deploy -- worldpay-connector-certificate-dev --context stage=dev --context account=1234567890`
+- `npm run deploy -- worldpay-connector-lambda-extension-dev --context stage=dev --context account=1234567890`
+- `npm run deploy -- worldpay-connector-lambda-notification-dev --context stage=dev --context account=1234567890`
 
-- `npm run deploy -- worldpay-connector-docker-dev --context stage=dev --context account=1234567890`
+## Apple Pay certificates
+
+Certificates for Apple Pay that are deployed with the lambda:
+
+* Private key to sign a payment session (merchant.key.decrypted)
+* Certificate for payment session (merchant_id.pem)
+
+Both files are expected to be in ASCII format. See [README.md](../application/certs/README.md) for details.

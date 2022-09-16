@@ -1,0 +1,9 @@
+# CDK
+cdk.out/
+cdk.context.json
+
+# TypeScript
+*.d.ts
+*.js
+*.map
+layers/nodejs/**

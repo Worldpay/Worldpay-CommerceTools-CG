@@ -1,0 +1,28 @@
+{
+  "name": "@gradientedge/wcc-app-azure-notification-function",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - Azure Function App function for handling payment requests",
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/worldpay-commercetools-connector#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientedge/worldpay-commercetools-connector.git",
+    "directory": "packages/connector"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/worldpay-commercetools-connector/issues"
+  },
+  "dependencies": {
+    "@gradientedge/wcc-connector": "workspace:^0.0.0",
+    "@gradientedge/wcc-logger": "workspace:^0.0.0"
+  }
+}

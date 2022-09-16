@@ -2,15 +2,23 @@
 
 ![Worldpay and Commercetools Logos](docs/images/worldpay_commercetools_logos.png)
 
-The Worldpay-commercetools connector module provides integration between commercetools and the Worldpay Worldwide Payment Gateway (WPG) with support for the following payment use cases:
+The `worldpay-commercetools-connector` module provides integration between commercetools and Worldpay Worldwide Payment Gateway (WPG) with support for the following payment use cases:
 
-- [Worldpay Worldwide Payment Gateway](https://developer.worldpay.com/docs/wpg) (WPG) integration using the XML API
+- [Worldpay WPG](https://developer.worldpay.com/docs/wpg) integration using the XML API
 - Worldpay WPG [Hosted Payment Pages](https://developer.worldpay.com/docs/wpg/hostedintegration) integration (PCI DSS compliant)
 - Payment Authorisation, Authentication and Capture flows configurable across a large number of global payment types
 - [Payment Status Notification](https://developer.worldpay.com/docs/wpg/manage) updates and handling of Payment Cancel and Refund flows in a commercetools context
 - 3DS Flex for Payment Services Directive 2 (PSD2) / Strong Customer Authentication compliance
 - Risk Management Module integration
-- Worldpay [FraudSight](https://developer.worldpay.com/docs/wpg/fraudsightglobal/fraudsighthosted) screening integration
+- [Worldpay FraudSight](https://developer.worldpay.com/docs/wpg/fraudsightglobal/fraudsighthosted) screening integration
+- [Worldpay Direct payments](https://developer.worldpay.com/docs/wpg/directintegration) with support for payment method
+  - [PayPal express](https://developer.worldpay.com/docs/wpg/apms/paypal)
+  - [Klarna](https://developer.worldpay.com/docs/wpg/apms/klarnakp) Pay Now, Klarna Pay Later and Klarna Slice It (both Direct and hosted)
+  - [iDEAL](https://developer.worldpay.com/docs/wpg/apms/ideal)
+- Wallets
+  - [Apple Pay](https://developer.worldpay.com/docs/wpg/mobilewallets/applepay)
+  - [Google Pay](https://developer.worldpay.com/docs/wpg/mobilewallets/googlepay)
+- The [Worldpay Exemption Engine](https://developer.worldpay.com/docs/wpg/scaexemptionservices/exemptionengine)
 
 In addition the module source code repository provides:
 
@@ -24,7 +32,7 @@ The [commercetools Sunrise SPA repository](https://github.com/commercetools/sunr
 
 ## Integration Approach
 
-The integration approach leverages [commercetools API Extensions](https://docs.commercetools.com/api/projects/api-extensions) to register an extension and transform payment create/update API calls via the Worldpay Connector module between commercetools and the Worldpay payment gateway. The Connector has modules for handling both the synchronous payment request invocations and asynchronous payment status notifications from Worldpay back to commercetools.
+The integration approach leverages [commercetools API Extensions](https://docs.commercetools.com/api/projects/api-extensions) to register this extension and transform payment create/update API calls via the Worldpay Connector module between commercetools and the Worldpay payment gateway. The Connector has modules for handling both the synchronous payment request invocations and asynchronous payment status notifications from Worldpay back to commercetools.
 
 ![Connector Architecture](docs/images/extension_and_notification_architecture.png)
 
@@ -45,3 +53,4 @@ For full details of the connector :
 The Connector is designed to be configurable and easily extensible. It is composed of Node.js applications that can be deployed either cloud natively as serverless functions in AWS or other public cloud, or on any infrastructure via Docker containers.
 
 - [Developer Guide](docs/DEVELOPER_GUIDE.md)
+
