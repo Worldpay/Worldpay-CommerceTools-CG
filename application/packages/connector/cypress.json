@@ -1,0 +1,19 @@
+{
+  "integrationFolder": "__tests__/e2e/specs",
+  "fixturesFolder": "__tests__/e2e/fixtures",
+  "pluginsFile": "__tests__/e2e/plugins/index.js",
+  "supportFile": "__tests__/e2e/support/index.js",
+  "projectId": "Worldpay connector",
+  "graphqlTimeout": 10000,
+  "chromeWebSecurity": false,
+  "reporterOptions": {
+    "reporterEnabled": "spec, mocha-junit-reporter",
+    "mochaJunitReporterReporterOptions": {
+      "mochaFile": "__tests__/e2e/output.xml"
+    }
+  },
+  "retries": {
+    "runMode": 2,
+    "openMode": 0
+  }
+}

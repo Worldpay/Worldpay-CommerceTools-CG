@@ -1,0 +1,31 @@
+{
+  "name": "@gradientedge/wcc-app-aws-lambda-notification",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - AWS Lambda for notification requests",
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/worldpay-commercetools-connector#readme",
+  "license": "ISC",
+  "main": "src/index.js",
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientedge/worldpay-commercetools-connector.git",
+    "directory": "packages/connector"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/worldpay-commercetools-connector/issues"
+  },
+  "dependencies": {
+    "@gradientedge/wcc-connector": "workspace:^0.0.0",
+    "@gradientedge/wcc-logger": "workspace:^0.0.0",
+    "@gradientedge/wcc-utils": "workspace:^0.0.0",
+    "http-headers-js": "^1.0.10",
+    "lodash.mapkeys": "^4.6.0"
+  }
+}

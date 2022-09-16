@@ -1,0 +1,19 @@
+{
+  "version": "{{ type-version }}",
+  "actions": [
+    {
+      "action": "addFieldDefinition",
+      "fieldDefinition": {
+        "name": "paymentData",
+        "label": {
+          "en": "Payment data"
+        },
+        "required": false,
+        "type": {
+          "name": "String"
+        },
+        "inputHint": "MultiLine"
+      }
+    }
+  ]
+}

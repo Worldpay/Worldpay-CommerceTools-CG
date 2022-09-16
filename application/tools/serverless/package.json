@@ -1,0 +1,24 @@
+{
+  "name": "serverless-local",
+  "version": "0.0.0",
+  "description": "A simple serverless-offline setup for easy local development of lambda functions",
+  "author": "Jimmy Thomson <jimmy@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/mach-api#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gradientedge/mach-api.git"
+  },
+  "scripts": {
+    "start": "node --inspect --enable-source-maps ./node_modules/serverless/bin/serverless.js offline"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/mach-api/issues"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "serverless": "^3.12.0",
+    "serverless-dotenv-plugin": "^3.12.2",
+    "serverless-offline": "^8.5.0"
+  }
+}

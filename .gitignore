@@ -101,7 +101,16 @@ local.settings.json
 .coverage
 .reports
 
-/packages/connector/junit.xml
+/application/connector/junit.xml
 
 # Word Docs
 *.docx
+
+# Build artifacts
+.artifacts
+
+# Cypress tests
+**/cypress
+/application/packages/connector/cypress.env.json
+/application/packages/connector/env.sh
+/application/cypress.env.json

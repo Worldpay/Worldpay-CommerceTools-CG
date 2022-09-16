@@ -1,0 +1,69 @@
+{
+  "name": "connector",
+  "version": "0.0.0",
+  "description": "Worldpay Commercetools Connector - Connector Module",
+  "keywords": [
+    "worldpay",
+    "commercetools",
+    "payment"
+  ],
+  "author": "Gradient Edge <info@gradientedge.com>",
+  "homepage": "https://github.com/gradientedge/worldpay-commercetools-connector#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientedge/worldpay-commercetools-connector.git",
+    "directory": "packages/connector"
+  },
+  "scripts": {
+    "lint": "eslint \"**/*.js\" --max-warnings=0",
+    "prepare": "cd .. && husky install",
+    "prettier": "prettier --check \"**/*.{js,json}\"",
+    "prettify": "prettier --write \"**/*.{js,json}\"",
+    "test": "jest --silent",
+    "validate": "npm run prettier && npm run lint && npm test",
+    "e2etest:all": "cd packages/connector; npm run e2etest:all",
+    "e2etest:interact": "cd packages/connector; npm run e2etest:interact",
+    "e2etest:all:headed": "cd packages/connector; npm run e2etest:all:headed",
+    "e2etest:hosted": "cd packages/connector; npm run e2etest:hosted",
+    "package:aws": "pnpm package:aws-lambda-payment && pnpm package:aws-lambda-notification",
+    "package:aws-lambda-payment": "esbuild apps/aws/payment-lambda/src/index.js --bundle --platform=node --target=node14 --outdir=../.artifacts/aws-lambda-payment",
+    "package:aws-lambda-notification": "esbuild apps/aws/notification-lambda/src/index.js --bundle --platform=node --target=node14 --outdir=../.artifacts/aws-lambda-notification",
+    "package:azure": "pnpm package:azure --filter @gradientedge/wcc-tasks",
+    "package:docker": "esbuild apps/container/docker/src/index.js --bundle --platform=node --target=node14 --outdir=../.artifacts/docker-container",
+    "start:docker": "node --inspect-brk -r dotenv/config apps/container/docker/src/index.js",
+    "start:aws": "cd tools/serverless && pnpm start",
+    "docx": "cp -R ../docs . && cp -r docs/images . && pandoc -s -o WP_CT_Connector.docx ../README.md ../docs/*.md packages/connector/*.md certs/*.md packages/connector/src/commercetools/*.md packages/connector/src/processor/notification/*.md packages/connector/src/processor/payment/*.md apps/container/docker/*.md"
+  },
+  "bugs": {
+    "url": "https://github.com/gradientedge/worldpay-commercetools-connector/issues"
+  },
+  "jest-junit": {
+    "outputDirectory": "../../.reports/junit",
+    "outputName": "js-test-results.xml"
+  },
+  "workspaces": [
+    "./apps/**",
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "dotenv": "^14.2.0",
+    "esbuild": "^0.14.13",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.4",
+    "jest": "^27.4.7",
+    "jest-junit": "^13.0.0",
+    "jest-xml-matcher": "^1.2.0",
+    "prettier": "^2.5.1",
+    "supertest": "^6.2.2"
+  }
+}

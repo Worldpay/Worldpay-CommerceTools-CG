@@ -1,0 +1,67 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      SLACK_WEBHOOK:
+        required: false
+
+name: Worldpay Commercetools Connector - Validate Pipeline
+
+jobs:
+  build-and-test:
+    name: Validate Job
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+    steps:
+      - name: Checkout Code
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js ${{ matrix.node-version }}
+        id: setup-nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: ${{ github.repository }}-cache
+        with:
+          path: |
+            ./application/node_modules
+            ./infrastructure/aws/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Setup Environment
+        id: setup-environment
+        uses: ./.github/actions/setup-env
+        with:
+          use-cache: steps.cache-dependencies.outputs.cache-hit
+      - name: Build Applications
+        id: build-applications
+        uses: ./.github/actions/build
+      - name: Test Applications
+        id: test-applications
+        uses: ./.github/actions/test
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ github.event_name == 'push' && success() }}
+        with:
+          name: build-artifact
+          path: ./.artifacts
+#      - name: Notify Slack
+#        id: notify-slack
+#        uses: act10ns/slack@v1
+#        if: always()
+#        with:
+#          status: ${{ job.status }}
+#          steps: ${{ toJson(steps) }}
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}

@@ -8,12 +8,12 @@ updates:
       interval: 'monthly'
     versioning-strategy: increase
   - package-ecosystem: 'npm'
-    directory: '/packages/connector'
+    directory: '/application'
     schedule:
       interval: 'monthly'
     versioning-strategy: increase
   - package-ecosystem: 'npm'
-    directory: '/packages/infra-aws'
+    directory: '/infrastucture/aws'
     schedule:
       interval: 'monthly'
     versioning-strategy: increase
