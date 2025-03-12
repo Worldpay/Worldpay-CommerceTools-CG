@@ -53,7 +53,7 @@
     "validate.js": "^0.13.1",
     "winston": "^3.7.2",
     "xmlbuilder2": "^3.0.2",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@commercetools/sdk-auth": "^3.0.13",
