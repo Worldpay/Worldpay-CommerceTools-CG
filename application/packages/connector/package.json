@@ -43,7 +43,7 @@
     "@commercetools/sdk-middleware-http": "^6.2.0",
     "@gradientedge/wcc-context": "workspace:^0.0.0",
     "@gradientedge/wcc-logger": "workspace:^0.0.0",
-    "axios": "^0.26.1",
+    "axios": "^1.7.2",
     "currency-codes": "^2.1.0",
     "fast-xml-parser": "^4.0.7",
     "http-headers-js": "^1.0.10",
